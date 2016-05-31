@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Godiva;
 
-namespace GodivaTest
+namespace GodivaSample
 {
     public class Startup
     {
@@ -20,6 +21,8 @@ namespace GodivaTest
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
+            app.UseGodiva();
+
             app.Run(async (context) =>
             {
                 await context.Response.WriteAsync("Hello World! Ehm I mean GODIVA");
