@@ -18,23 +18,38 @@ namespace Godiva
     public class GodivaMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IApplicationBuilder _app;
+        private readonly GodivaOptions _options;
 
-        public GodivaMiddleware(IApplicationBuilder app, RequestDelegate next)
+        public GodivaMiddleware(RequestDelegate next)
         {
             _next = next;
+            if (_options == null) _options = new GodivaOptions();
+        }
+        public GodivaMiddleware(RequestDelegate next, GodivaOptions options) : this(next)
+        {
+            _options = options;
         }
 
         public async Task Invoke(HttpContext context)
         {
-            
-            //template parser
-            //route parser
-            //check both
-            //execute
+            if (context.Request.Method == "DEBUG")
+            {
+                await _next.Invoke(context);
+            }
+            else
+            {
+                //template parser
+                //route parser
+                //check both
+                //execute
 
-            await context.Response.WriteAsync("what?");
-            //await _next.Invoke(context);
+                var route = new RouteParser(context, _options.RouteTemplate);
+                var procedure = route.GetProcedure();
+                var db = new DataBaseContext(context);
+                await db.Execute(procedure);
+                //await context.Response.WriteAsync("what?");
+                //await _next.Invoke(context);
+            }
         }
     }
 }

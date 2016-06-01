@@ -21,12 +21,19 @@ namespace GodivaSample
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
-            app.UseGodiva();
-
-            app.Run(async (context) =>
+            app.UseGodiva(new GodivaOptions()
             {
-                await context.Response.WriteAsync("Hello World! Ehm I mean GODIVA");
+                RouteTemplate = new RouteTemplate()
+                {
+                    Template = "api/{procedure}"
+                },
+                ProcedurePrefix = "P_V_"
             });
+
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("Hello World! Ehm I mean GODIVA");
+            //});
         }
     }
 }

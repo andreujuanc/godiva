@@ -8,8 +8,10 @@ namespace Godiva
 {
     public static class GodivaExtensions
     {
-        public static IApplicationBuilder UseGodiva(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseGodiva(this IApplicationBuilder builder, GodivaOptions options = null)
         {
+            if(options != null)
+                return builder.UseMiddleware<GodivaMiddleware>(options);
             return builder.UseMiddleware<GodivaMiddleware>();
         }
     }
